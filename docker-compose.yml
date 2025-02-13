@@ -1,0 +1,46 @@
+services:
+  web:
+    build: .
+    container_name: apache-lamp
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/var/www/html
+    depends_on:
+      - db
+    networks:
+      - lamp-network
+
+  db:
+    image: mysql:8.0
+    container_name: mysql-lamp
+    environment:
+      MYSQL_ROOT_PASSWORD: secret
+      MYSQL_DATABASE: laravel
+    volumes:
+      - mysql-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      lamp-network:
+        aliases:
+          - mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      - PMA_HOST=mysql
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - lamp-network
+
+networks:
+  lamp-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
