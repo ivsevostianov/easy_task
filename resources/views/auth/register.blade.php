@@ -14,22 +14,12 @@
     <div class="fixed inset-0 pointer-events-none">
         <div class="absolute inset-0 opacity-30"
              style="background-image: radial-gradient(#1F2937 1px, transparent 1px);
-                        background-size: 32px 32px;">
+                  background-size: 32px 32px;">
         </div>
     </div>
 
     <div class="min-h-screen flex flex-col items-center justify-center p-4 relative z-10">
         <!-- Logo -->
-        <div class="w-16 h-16 mb-8 relative">
-            <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur-lg animate-pulse"></div>
-            <div class="relative bg-gray-900 p-3 rounded-lg border border-gray-700">
-                <svg class="w-full h-full text-blue-500" viewBox="0 0 24 24" fill="none">
-                    <path d="M21 9V3H15M21 3L12 12M10 3H7.8C6.12 3 5.28 3 4.638 3.327C4.074 3.615 3.615 4.074 3.327 4.638C3 5.28 3 6.12 3 7.8V16.2C3 17.88 3 18.72 3.327 19.362C3.615 19.926 4.074 20.385 4.638 20.673C5.28 21 6.12 21 7.8 21H16.2C17.88 21 18.72 21 19.362 20.673C19.926 20.385 20.385 19.926 20.673 19.362C21 18.72 21 17.88 21 16.2V14"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
-        </div>
-
         <div class="w-full max-w-md relative">
             <!-- Main card -->
             <div class="backdrop-blur-xl bg-gray-800/30 border border-gray-700 rounded-2xl p-8 shadow-2xl relative">
@@ -41,13 +31,13 @@
                     <!-- Header -->
                     <div class="text-center mb-8">
                         <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
-                            Create Account 🚀
+                            Create Account
                         </h1>
                         <p class="mt-2 text-gray-400">Let's get you started with your account</p>
                     </div>
 
                     <!-- Registration Form -->
-                    <form method="POST" action="{{ route('register') }}" class="space-y-6">
+                    <form id="registerForm" method="POST" action="{{ route('register') }}" class="space-y-6">
                         @csrf
 
                         <!-- Name -->
@@ -64,6 +54,9 @@
                             @error('name')
                             <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                             @enderror
+                            <p id="clientNameError" class="mt-1 text-sm text-red-400 hidden">
+                                Name must be at least 3 characters long and contain only letters.
+                            </p>
                         </div>
 
                         <!-- Email -->
@@ -79,6 +72,9 @@
                             @error('email')
                             <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                             @enderror
+                            <p id="clientEmailError" class="mt-1 text-sm text-red-400 hidden">
+                                Please enter a valid email address.
+                            </p>
                         </div>
 
                         <!-- Password -->
@@ -93,6 +89,9 @@
                             @error('password')
                             <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                             @enderror
+                            <p id="clientPasswordLengthError" class="mt-1 text-sm text-red-400 hidden">
+                                Password must be at least 8 characters long.
+                            </p>
                         </div>
 
                         <!-- Confirm Password -->
@@ -106,6 +105,9 @@
                                    required
                                    class="w-full px-4 py-2 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white"
                                    placeholder="••••••••">
+                            <p id="clientPasswordError" class="mt-1 text-sm text-red-400 hidden">
+                                Passwords do not match.
+                            </p>
                         </div>
 
                         <!-- Form actions -->
@@ -114,8 +116,8 @@
                                class="text-sm text-gray-400 hover:text-blue-400 transition-colors duration-200">
                                 Already registered?
                             </a>
-                            <button type="submit"
-                                    class="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-lg hover:from-blue-600 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-200 transform hover:scale-105">
+                            <button id="registerButton" type="submit" disabled
+                                    class="px-6 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-lg opacity-50 cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition-all duration-200 transform hover:scale-105">
                                 Register
                             </button>
                         </div>
@@ -129,6 +131,122 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Flag variables to track whether the user has interacted with each field
+    let nameTouched = false;
+    let emailTouched = false;
+    let passwordTouched = false;
+    let confirmPasswordTouched = false;
+
+    // Get references to the form elements
+    const registerForm = document.getElementById('registerForm');
+    const nameInput = document.getElementById('name');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const passwordConfirmInput = document.getElementById('password_confirmation');
+    const registerButton = document.getElementById('registerButton');
+
+    // Get references to client-side error elements
+    const clientNameError = document.getElementById('clientNameError');
+    const clientEmailError = document.getElementById('clientEmailError');
+    const clientPasswordLengthError = document.getElementById('clientPasswordLengthError');
+    const clientPasswordError = document.getElementById('clientPasswordError');
+
+    // Validation functions
+    function validateName() {
+        const nameValue = nameInput.value.trim();
+        const nameRegex = /^(?=.{3,}$)[A-Za-z]+(?:\s[A-Za-z]+)*$/
+        ; // At least 3 letters
+        const valid = nameRegex.test(nameValue);
+        // Only show the error if the field has been touched
+        if (nameTouched) {
+            clientNameError.classList.toggle('hidden', valid);
+        }
+        return valid;
+    }
+
+    function validateEmail() {
+        const emailValue = emailInput.value.trim();
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const valid = emailRegex.test(emailValue);
+        if (emailTouched) {
+            clientEmailError.classList.toggle('hidden', valid);
+        }
+        return valid;
+    }
+
+    function validatePasswordLength() {
+        const valid = passwordInput.value.length >= 8;
+        if (passwordTouched) {
+            clientPasswordLengthError.classList.toggle('hidden', valid);
+        }
+        return valid;
+    }
+
+    function validatePasswordMatch() {
+        const valid = passwordInput.value === passwordConfirmInput.value && passwordInput.value.length > 0;
+        if (confirmPasswordTouched) {
+            clientPasswordError.classList.toggle('hidden', valid);
+        }
+        return valid;
+    }
+
+    // Master validation function to update the button state
+    function validateForm() {
+        const isNameValid = validateName();
+        const isEmailValid = validateEmail();
+        const isPasswordLengthValid = validatePasswordLength();
+        const isPasswordMatch = validatePasswordMatch();
+
+        if (isNameValid && isEmailValid && isPasswordLengthValid && isPasswordMatch) {
+            registerButton.disabled = false;
+            registerButton.classList.remove('opacity-50', 'cursor-not-allowed');
+        } else {
+            registerButton.disabled = true;
+            if (!registerButton.classList.contains('opacity-50')) {
+                registerButton.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        }
+        return isNameValid && isEmailValid && isPasswordLengthValid && isPasswordMatch;
+    }
+
+    // Attach event listeners for each field so that its error shows only once touched
+    nameInput.addEventListener('input', () => {
+        nameTouched = true;
+        validateName();
+        validateForm();
+    });
+
+    emailInput.addEventListener('input', () => {
+        emailTouched = true;
+        validateEmail();
+        validateForm();
+    });
+
+    passwordInput.addEventListener('input', () => {
+        passwordTouched = true;
+        validatePasswordLength();
+        // Also update password match if confirm field is already touched
+        if (confirmPasswordTouched) {
+            validatePasswordMatch();
+        }
+        validateForm();
+    });
+
+    passwordConfirmInput.addEventListener('input', () => {
+        confirmPasswordTouched = true;
+        validatePasswordMatch();
+        validateForm();
+    });
+
+    // Optionally, prevent form submission if validations fail
+    registerForm.addEventListener('submit', (event) => {
+        if (!validateForm()) {
+            event.preventDefault();
+        }
+    });
+</script>
 
 <style>
     @keyframes blob {

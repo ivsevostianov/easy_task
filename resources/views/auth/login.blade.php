@@ -20,15 +20,7 @@
 
     <div class="min-h-screen flex flex-col items-center justify-center p-4 relative z-10">
         <!-- Logo -->
-        <div class="w-16 h-16 mb-8 relative">
-            <div class="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur-lg animate-pulse"></div>
-            <div class="relative bg-gray-900 p-3 rounded-lg border border-gray-700">
-                <svg class="w-full h-full text-blue-500" viewBox="0 0 24 24" fill="none">
-                    <path d="M21 9V3H15M21 3L12 12M10 3H7.8C6.12 3 5.28 3 4.638 3.327C4.074 3.615 3.615 4.074 3.327 4.638C3 5.28 3 6.12 3 7.8V16.2C3 17.88 3 18.72 3.327 19.362C3.615 19.926 4.074 20.385 4.638 20.673C5.28 21 6.12 21 7.8 21H16.2C17.88 21 18.72 21 19.362 20.673C19.926 20.385 20.385 19.926 20.673 19.362C21 18.72 21 17.88 21 16.2V14"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
-        </div>
+
 
         <div class="w-full max-w-md relative">
             <!-- Main card -->
@@ -41,7 +33,7 @@
                     <!-- Header -->
                     <div class="text-center mb-8">
                         <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400">
-                            Welcome Back 🚀
+                            Welcome Back
                         </h1>
                         <p class="mt-2 text-gray-400">Please sign in to continue</p>
                     </div>

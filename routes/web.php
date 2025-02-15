@@ -21,6 +21,10 @@ Route::middleware('guest')->group(function () {
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 });
 
+Route::get('/simulate-500', function () {
+    abort(500);
+});
+
 // Protected routes
 Route::middleware('auth')->group(function () {
     // Logout route

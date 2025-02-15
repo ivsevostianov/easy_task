@@ -7,10 +7,15 @@
     <nav class="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl border-b border-gray-200 dark:border-gray-700">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <div class="flex items-center">
+                <div class="flex items-center space-x-4">
                     <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
                         Your Tasks
                     </span>
+                    <!-- About Button -->
+                    <a href="/about"
+                       class="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105">
+                        About
+                    </a>
                 </div>
                 <div class="flex items-center space-x-4">
                     <!-- Theme Toggle Button -->
