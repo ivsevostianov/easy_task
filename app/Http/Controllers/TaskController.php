@@ -12,22 +12,38 @@ class TaskController extends Controller
 
     public function index()
     {
+        // Only show tasks owned by the authenticated user (prevents IDOR)
         $tasks = auth()->user()->tasks()->latest()->get();
         return view('tasks.index', compact('tasks'));
     }
 
+    public function show(Task $task)
+    {
+        // CRITICAL: Prevent IDOR - verify user owns this task
+        $this->authorize('view', $task);
+
+        return view('tasks.show', compact('task'));
+    }
+
     public function create()
     {
+        // Verify user can create tasks
+        $this->authorize('create', Task::class);
+
         return view('tasks.create');
     }
 
     public function store(Request $request)
     {
+        // Verify user can create tasks
+        $this->authorize('create', Task::class);
+
         $validated = $request->validate([
             'title' => 'required|max:255',
             'description' => 'nullable',
         ]);
 
+        // Automatically assign to authenticated user (Principle of Least Privilege)
         auth()->user()->tasks()->create($validated);
 
         return redirect()->route('tasks.index')
@@ -36,7 +52,7 @@ class TaskController extends Controller
 
     public function edit(Task $task)
     {
-        // Authorize the request
+        // CRITICAL: Prevent IDOR - verify user owns this task
         $this->authorize('update', $task);
 
         return view('tasks.edit', compact('task'));

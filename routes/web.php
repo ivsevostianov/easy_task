@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 // Redirect root to login
@@ -10,19 +11,12 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
-// Auth routes
-Route::middleware('guest')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])
-        ->name('register');
-    Route::post('register', [RegisteredUserController::class, 'store']);
+// Include separate auth routes file
+require __DIR__.'/auth.php';
 
-    Route::get('login', [AuthenticatedSessionController::class, 'create'])
-        ->name('login');
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
-});
-
-Route::get('/simulate-500', function () {
-    abort(500);
+// Test 500 error route
+Route::get('/test-500', function () {
+    abort(500, 'This is a test server error');
 });
 
 // Protected routes
@@ -36,6 +30,9 @@ Route::middleware('auth')->group(function () {
         return redirect('/tasks');
     })->name('dashboard');
 
-    // Task routes
+    // Task routes - with IDOR protection via policies
     Route::resource('tasks', TaskController::class);
+
+    // User profile routes - demonstrates IDOR protection
+    Route::resource('users', UserController::class)->only(['index', 'show', 'edit', 'update']);
 });

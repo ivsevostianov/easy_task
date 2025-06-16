@@ -3,18 +3,22 @@
 namespace App\Providers;
 
 use App\Models\Task;
+use App\Models\User;
 use App\Policies\TaskPolicy;
+use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
     /**
      * The model to policy mappings for the application.
+     * These policies prevent IDOR attacks by ensuring users can only access their own resources.
      *
      * @var array<class-string, class-string>
      */
     protected $policies = [
         Task::class => TaskPolicy::class,
+        User::class => UserPolicy::class,
     ];
 
     /**

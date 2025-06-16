@@ -11,6 +11,11 @@
                     <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-purple-500">
                         Your Tasks
                     </span>
+                    <!-- Profile Button - Test IDOR Protection -->
+                    <a href="{{ route('users.show', auth()->user()) }}"
+                       class="px-4 py-2 bg-gradient-to-r from-green-500 to-teal-600 text-white font-medium rounded-lg hover:from-green-600 hover:to-teal-700 transition-all duration-200 transform hover:scale-105">
+                        👤 My Profile
+                    </a>
                     <!-- About Button -->
                     <a href="/about"
                        class="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white font-medium rounded-full hover:from-blue-600 hover:to-purple-700 transition-all duration-200 transform hover:scale-105">

@@ -67,6 +67,7 @@
                                    id="email"
                                    value="{{ old('email') }}"
                                    required
+                                   autocomplete="username email"
                                    class="w-full px-4 py-2 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-500 text-white"
                                    placeholder="you@example.com">
                             @error('email')
@@ -84,13 +85,29 @@
                                    name="password"
                                    id="password"
                                    required
+                                   autocomplete="new-password"
                                    class="w-full px-4 py-2 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white"
                                    placeholder="••••••••">
                             @error('password')
                             <p class="mt-1 text-sm text-red-400">{{ $message }}</p>
                             @enderror
+                            <div class="mt-2 space-y-1">
+                                <p class="text-xs text-gray-400">
+                                    💡 <strong>Password Manager Tip:</strong> Use a password manager to generate and store a strong, unique password
+                                </p>
+                                <div class="text-xs text-gray-400">
+                                    <div class="font-medium mb-1">Password must contain:</div>
+                                    <ul class="space-y-1">
+                                        <li id="length-check">• At least 12 characters</li>
+                                        <li id="letters-check">• Letters (a-z, A-Z)</li>
+                                        <li id="numbers-check">• Numbers (0-9)</li>
+                                        <li id="symbols-check">• Symbols (!@#$%^&*)</li>
+                                        <li id="case-check">• Mixed case (Upper & Lower)</li>
+                                    </ul>
+                                </div>
+                            </div>
                             <p id="clientPasswordLengthError" class="mt-1 text-sm text-red-400 hidden">
-                                Password must be at least 8 characters long.
+                                Password must meet all requirements above.
                             </p>
                         </div>
 
@@ -103,6 +120,7 @@
                                    name="password_confirmation"
                                    id="password_confirmation"
                                    required
+                                   autocomplete="new-password"
                                    class="w-full px-4 py-2 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white"
                                    placeholder="••••••••">
                             <p id="clientPasswordError" class="mt-1 text-sm text-red-400 hidden">

@@ -58,6 +58,7 @@
                                    value="{{ old('email') }}"
                                    required
                                    autofocus
+                                   autocomplete="username email"
                                    class="w-full px-4 py-2 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder-gray-500 text-white"
                                    placeholder="you@example.com">
                             @error('email')
@@ -72,6 +73,7 @@
                                    name="password"
                                    id="password"
                                    required
+                                   autocomplete="current-password"
                                    class="w-full px-4 py-2 bg-gray-900/50 border border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-white"
                                    placeholder="••••••••">
                             @error('password')
